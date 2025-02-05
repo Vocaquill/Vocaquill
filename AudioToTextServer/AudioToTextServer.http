@@ -1,0 +1,6 @@
+@AudioToTextServer_HostAddress = http://localhost:5055
+
+GET {{AudioToTextServer_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
