@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35707.178 d17.12
+VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vocaquill", "Vocaquill\Vocaquill.csproj", "{1C0DAC00-2E01-424A-9BBD-857E6C0D2E55}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioToTextServer", "..\..\AudioToTextServer\AudioToTextServer\AudioToTextServer.csproj", "{6B82C34E-DE70-4EAA-90DA-E8CAA8EEEA08}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{1C0DAC00-2E01-424A-9BBD-857E6C0D2E55}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C0DAC00-2E01-424A-9BBD-857E6C0D2E55}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C0DAC00-2E01-424A-9BBD-857E6C0D2E55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B82C34E-DE70-4EAA-90DA-E8CAA8EEEA08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B82C34E-DE70-4EAA-90DA-E8CAA8EEEA08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B82C34E-DE70-4EAA-90DA-E8CAA8EEEA08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B82C34E-DE70-4EAA-90DA-E8CAA8EEEA08}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
