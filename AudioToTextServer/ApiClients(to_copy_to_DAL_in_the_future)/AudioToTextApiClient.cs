@@ -3,13 +3,22 @@ using Newtonsoft.Json;
 
 namespace AudioToTextServer.ApiClients
 {
-    public class AudioToTextApiClien
+    public class AudioToTextApiClient
     {
-        public AudioToTextApiClien() 
+        public AudioToTextApiClient() 
         {
             this._httpClient = new HttpClient();
         }
 
+        /// <summary>
+        /// Uploads an audio file to a server for speech recognition and retrieves the recognized text.
+        /// </summary>
+        /// <param name="filePath">The local file path of the audio file to be uploaded.</param>
+        /// <param name="serverFileName">The name under which the file will be stored on the server.</param>
+        /// <returns>A string containing the transcribed text from the audio file.</returns>
+        /// <exception cref="Exception">
+        /// Thrown if the server returns an error response or if the response structure is invalid.
+        /// </exception>
         public async Task<string> GetTextFromAudioAsync(string filePath, string serverFileName)
         {
             using var content = new MultipartFormDataContent();
@@ -17,7 +26,7 @@ namespace AudioToTextServer.ApiClients
 
             content.Add(new StreamContent(fileStream), "file", $"{serverFileName}.mp3");
 
-            var response = await _httpClient.PostAsync("http://35.159.119.219:5000/api/audio/upload", content);
+            var response = await _httpClient.PostAsync("http://35.159.119.219:5000/api/audio/upload", content); // to be replaced by a constant in the future
 
             if (!response.IsSuccessStatusCode)
                 throw new Exception("Server error");
