@@ -9,29 +9,99 @@
       Title="MainPage">
     <Page.Resources>
         <Style TargetType="Button">
-            <Setter Property="Margin" Value="5"></Setter>
-            <Setter Property="FontSize" Value="15"></Setter>
-            <Setter Property="FontFamily" Value="Lucida Sans Unicode"></Setter>
-            <Setter Property="Width" Value="180"></Setter>
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="FontFamily" Value="Lucida Sans Unicode" />
+            <Setter Property="Width" Value="180" />
+            <Setter Property="Background" Value="#FF007ACC" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="10,5" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" 
+                                CornerRadius="5" 
+                                SnapsToDevicePixels="True">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#FF005A9E" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#FF003F6B" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="border" Property="Background" Value="#FFC0C0C0" />
+                                <Setter Property="Foreground" Value="Gray" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Стиль для текстового поля -->
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="10" />
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="Padding" Value="5" />
+            <Setter Property="Background" Value="White" />
+            <Setter Property="BorderBrush" Value="#FF007ACC" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="AcceptsReturn" Value="True" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+        </Style>
+
+        <!-- Стиль для TextBlock (наприклад, для таймера) -->
+        <Style TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="5" />
         </Style>
     </Page.Resources>
+
     <Grid>
+        <!-- Градієнтний фон для всієї сторінки -->
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                <GradientStop Color="#FFDEEAF6" Offset="0.0" />
+                <GradientStop Color="#FFC1DDE9" Offset="1.0" />
+            </LinearGradientBrush>
+        </Grid.Background>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-
-        <StackPanel Orientation="Horizontal" Background="LightSteelBlue"  Grid.Row="0">
-            <Button Content="Вийти з аккаунта" Name="LogoutBT" Click="LogoutBT_Click"/>
+        <!-- Верхня панель з кнопками і таймером з ефектом тіні -->
+        <StackPanel Orientation="Horizontal" Background="LightSteelBlue" Grid.Row="0">
+            <StackPanel.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="8" ShadowDepth="2" Opacity="0.3"/>
+            </StackPanel.Effect>
             <Button Content="Старт запису" Name="StartStopRecordBT" Click="StartStopRecordBT_Click"/>
-            <TextBlock FontSize="18" Margin="5" Name="TimerRecordTB">00:00</TextBlock>
+            <TextBlock Background="WhiteSmoke" FontSize="18" Name="TimerRecordTB" Text="00:00"/>
+            <Border Margin="10,2,2,2" Width="40" Height="40" Cursor="Hand"
+                MouseDown="SettingsBorder_MouseDown">
+                <Border.Background>
+                    <ImageBrush ImageSource="/Images/settingLogo.png"/>
+                </Border.Background>
+            </Border>
+            <Button Margin="315,5,5,5" Content="Вийти з аккаунта" Name="LogoutBT" Click="LogoutBT_Click"/>
         </StackPanel>
 
+        <!-- Основна область з лівою панеллю та текстовим полем -->
         <DockPanel Grid.Row="1" Margin="10">
-            <StackPanel DockPanel.Dock="Left" Width="200" Background="LightSteelBlue">
+            <!-- Ліва панель із додатковим відступом і паддінгом -->
+            <StackPanel DockPanel.Dock="Left" Width="220" Background="LightSteelBlue" Margin="0,0,10,0">
                 <Button Content="Генерація PDF"/>
             </StackPanel>
-            <TextBox Name="LectureTextBox" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Margin="10"/>
+            <!-- Текстове поле в рамці -->
+            <Border Background="White" BorderBrush="#FF007ACC" BorderThickness="1" CornerRadius="5">
+                <TextBox Name="LectureTextBox"/>
+            </Border>
         </DockPanel>
     </Grid>
 </Page>

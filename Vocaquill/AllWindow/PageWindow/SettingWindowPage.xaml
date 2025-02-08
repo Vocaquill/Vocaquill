@@ -1,0 +1,24 @@
+﻿<Page x:Class="Vocaquill.AllWindow.PageWindow.SettingWindowPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Vocaquill.AllWindow.PageWindow"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="SettingWindowPage">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="233*"></ColumnDefinition>
+            <ColumnDefinition Width="333*"></ColumnDefinition>
+            <ColumnDefinition Width="234*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="1" Margin="50">
+            <Border Background="Green" Opacity="0.5">
+                
+            </Border>
+        </Grid>
+        <Grid Grid.Column="0" Opacity="0.5" Background="Black"></Grid>
+        <Grid Grid.Column="2" Opacity="0.5" Background="Black"></Grid>
+    </Grid>
+</Page>
