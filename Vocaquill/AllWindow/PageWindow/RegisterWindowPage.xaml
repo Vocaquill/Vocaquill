@@ -55,7 +55,7 @@
                 <TextBlock TextAlignment="Left">Ваша пошта</TextBlock>
                 <TextBox></TextBox>
 
-                <Button  Foreground="White" Name="LoginBT" Click="LoginBT_Click">Зареєструватися</Button>
+                <Button  Foreground="White" Name="LoginBT">Зареєструватися</Button>
             </StackPanel>
         </Border>
     </Grid>
