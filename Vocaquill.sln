@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLL", "BLL\BLL.csproj", "{24B6C71E-0EC6-4BAB-9E66-EEC5228E0240}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioToTextServer", "AudioToTextServer\AudioToTextServer.csproj", "{B0817A69-592D-4D9C-816B-A7026D6FD5BB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{1C0DAC00-2E01-424A-9BBD-857E6C0D2E55}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C0DAC00-2E01-424A-9BBD-857E6C0D2E55}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C0DAC00-2E01-424A-9BBD-857E6C0D2E55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0817A69-592D-4D9C-816B-A7026D6FD5BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0817A69-592D-4D9C-816B-A7026D6FD5BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0817A69-592D-4D9C-816B-A7026D6FD5BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0817A69-592D-4D9C-816B-A7026D6FD5BB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DE8ECF89-FB8C-40BF-8591-3F4544D1DE2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DE8ECF89-FB8C-40BF-8591-3F4544D1DE2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE8ECF89-FB8C-40BF-8591-3F4544D1DE2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
