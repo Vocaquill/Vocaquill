@@ -22,7 +22,7 @@ namespace DAL.ApiClients
         /// <exception cref="Exception">
         /// Thrown if the AI server returns an error response or if the response structure is invalid.
         /// </exception>
-        public async Task<string> CreateSummary(AiQuestionSettings question)
+        public async Task<string> CreateSummaryAsync(AiQuestionSettings question)
         {
             var request = new GeminiPostRequest(question.ToString());
 

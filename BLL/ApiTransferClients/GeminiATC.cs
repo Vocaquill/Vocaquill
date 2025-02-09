@@ -18,9 +18,9 @@ namespace BLL.ApiTransferClients
              ).CreateMapper();
         }
 
-        public async Task<string> CreateSummary(AiQuestionSettingsATD question) 
+        public async Task<string> CreateSummaryAsync(AiQuestionSettingsATD question) 
         {
-            return await this._apiClient.CreateSummary(this._mapper.Map<AiQuestionSettings>(question));
+            return await this._apiClient.CreateSummaryAsync(this._mapper.Map<AiQuestionSettings>(question));
         }
 
         private GeminiApiClient _apiClient;
