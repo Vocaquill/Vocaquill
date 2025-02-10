@@ -22,17 +22,5 @@ namespace Vocaquill
             modalFrame.Content = new LoginWindowPage();
         }
         public event PropertyChangedEventHandler? PropertyChanged;
-
-        //private BaseCommand _commandLogin;
-        //public BaseCommand CommandLogin
-        //{
-        //    get
-        //    {
-        //        return _commandLogin ??= new BaseCommand(a =>
-        //        {
-        //            MessageBox.Show("Not ready :)");
-        //        });
-        //    }
-        //}
     }
 }

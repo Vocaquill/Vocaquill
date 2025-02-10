@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:Vocaquill"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" ResizeMode="NoResize">
-    <Grid Background="WhiteSmoke">
+    <Grid>
         <Frame Name="modalFrame" NavigationUIVisibility="Hidden"></Frame>
+        <Frame Name="pageFrame" NavigationUIVisibility="Hidden"></Frame>
     </Grid>
 </Window>

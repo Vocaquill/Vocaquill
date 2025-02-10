@@ -1,0 +1,44 @@
+﻿<Page x:Class="Vocaquill.AllWindow.PageWindow.SettingWindowPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Vocaquill.AllWindow.PageWindow"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="SettingWindowPage">
+    <Page.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="TextAlignment" Value="Center"></Setter>
+            <Setter Property="FontSize" Value="18"></Setter>
+            <Setter Property="Margin" Value="5"></Setter>
+        </Style>
+    </Page.Resources>
+    <Grid MouseDown="Grid_MouseDown">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="193*"></ColumnDefinition>
+            <ColumnDefinition Width="414*"></ColumnDefinition>
+            <ColumnDefinition Width="193*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="38*"></RowDefinition>
+            <RowDefinition Height="154*"></RowDefinition>
+            <RowDefinition Height="33*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Column="1" Grid.Row="1">
+            <Border Background="WhiteSmoke">
+                <StackPanel>
+                    <TextBlock Text="Налаштування"></TextBlock>
+                    <Button x:Name="ChoisePathBT" Content="Виберіть шлях" Click="ChoisePathBT_Click" ></Button>
+                    <TextBlock x:Name="DownloadPathTB" Text="Шлях:" TextAlignment="Left"></TextBlock>
+                </StackPanel>
+            </Border>
+        </Grid>
+        <Grid Grid.Column="1" Grid.Row ="0" Opacity="0.5" Background="Black"></Grid>
+        <Grid Grid.Column="1" Grid.Row ="2" Opacity="0.5" Background="Black"></Grid>
+
+
+        <Grid Grid.Column="0" Grid.RowSpan="3" Opacity="0.5" Background="Black"></Grid>
+        <Grid Grid.Column="2" Grid.RowSpan="3" Opacity="0.5" Background="Black"></Grid>
+    </Grid>
+</Page>

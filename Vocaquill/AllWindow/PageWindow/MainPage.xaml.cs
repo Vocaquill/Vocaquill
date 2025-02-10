@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace Vocaquill.AllWindow.PageWindow
 {
@@ -20,13 +21,48 @@ namespace Vocaquill.AllWindow.PageWindow
     /// </summary>
     public partial class MainPage : Page
     {
+        #region Timer
+        private DispatcherTimer timer;
+        private TimeSpan timeElapsed;
+        private bool isRecording = false;
+        #endregion
+        private SettingWindowPage settWinPage;
         public MainPage()
         {
             InitializeComponent();
+            settWinPage = new SettingWindowPage();
+            #region Timer initialize
+            timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Tick += Timer_Tick;
+            #endregion
         }
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            timeElapsed = timeElapsed.Add(TimeSpan.FromSeconds(1));
+            this.TimerRecordTB.Text = timeElapsed.ToString(@"mm\:ss");
+        }
+        private void SettingsBorder_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            (App.Current.MainWindow as MainWindow).pageFrame.Navigate(settWinPage);
+        }
+
         private void StartStopRecordBT_Click(object sender, RoutedEventArgs e)
         {
-
+            if (!isRecording)
+            {
+                TimerRecordTB.Text = "00:00";
+                timeElapsed = TimeSpan.Zero;
+                timer.Start();
+                StartStopRecordBT.Content = "Зупинити запис";
+                isRecording = true;
+            }
+            else
+            {
+                timer.Stop();
+                StartStopRecordBT.Content = "Старт запису";
+                isRecording = false;
+            }
         }
 
         private void LogoutBT_Click(object sender, RoutedEventArgs e)
