@@ -29,7 +29,7 @@ namespace DAL.Models
         public string Email { get; set; }
 
         [Required]
-        public bool isDeleted { get; set; } = false;
+        public bool IsDeleted { get; set; } = false;
         public ICollection<Query> Queries { get; set; }
     }
 }
