@@ -7,18 +7,38 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="SettingWindowPage">
-    <Grid>
+    <Page.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="TextAlignment" Value="Center"></Setter>
+            <Setter Property="FontSize" Value="18"></Setter>
+            <Setter Property="Margin" Value="5"></Setter>
+        </Style>
+    </Page.Resources>
+    <Grid MouseDown="Grid_MouseDown">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="233*"></ColumnDefinition>
-            <ColumnDefinition Width="333*"></ColumnDefinition>
-            <ColumnDefinition Width="234*"></ColumnDefinition>
+            <ColumnDefinition Width="193*"></ColumnDefinition>
+            <ColumnDefinition Width="414*"></ColumnDefinition>
+            <ColumnDefinition Width="193*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Grid Grid.Column="1" Margin="50">
-            <Border Background="Green" Opacity="0.5">
-                
+        <Grid.RowDefinitions>
+            <RowDefinition Height="38*"></RowDefinition>
+            <RowDefinition Height="154*"></RowDefinition>
+            <RowDefinition Height="33*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Column="1" Grid.Row="1">
+            <Border Background="WhiteSmoke">
+                <StackPanel>
+                    <TextBlock Text="Налаштування"></TextBlock>
+                    <Button x:Name="ChoisePathBT" Content="Виберіть шлях" Click="ChoisePathBT_Click" ></Button>
+                    <TextBlock x:Name="DownloadPathTB" Text="Шлях:" TextAlignment="Left"></TextBlock>
+                </StackPanel>
             </Border>
         </Grid>
-        <Grid Grid.Column="0" Opacity="0.5" Background="Black"></Grid>
-        <Grid Grid.Column="2" Opacity="0.5" Background="Black"></Grid>
+        <Grid Grid.Column="1" Grid.Row ="0" Opacity="0.5" Background="Black"></Grid>
+        <Grid Grid.Column="1" Grid.Row ="2" Opacity="0.5" Background="Black"></Grid>
+
+
+        <Grid Grid.Column="0" Grid.RowSpan="3" Opacity="0.5" Background="Black"></Grid>
+        <Grid Grid.Column="2" Grid.RowSpan="3" Opacity="0.5" Background="Black"></Grid>
     </Grid>
 </Page>

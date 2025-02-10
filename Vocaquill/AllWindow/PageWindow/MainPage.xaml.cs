@@ -44,7 +44,6 @@ namespace Vocaquill.AllWindow.PageWindow
         }
         private void SettingsBorder_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            MessageBox.Show("Натиснуто на Border!");
             (App.Current.MainWindow as MainWindow).pageFrame.Navigate(settWinPage);
         }
 
