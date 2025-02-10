@@ -13,10 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="AllWindow\MVVM\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Resource Include="Images\settingLogo.png" />
   </ItemGroup>
 
