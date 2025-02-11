@@ -53,9 +53,13 @@ namespace Vocaquill.AllWindow.PageWindow
             else
             {
                 timer.Stop();
-                StartStopRecordBT.Content = "Старт запису";
+                StartStopRecordBT.Content = "Новий запис";
                 isRecording = false;
             }
+        }
+        public void ShowInfo(string text) 
+        {
+            this.LectureTextBox.Text = text;
         }
 
         private void InitializeTimer() 

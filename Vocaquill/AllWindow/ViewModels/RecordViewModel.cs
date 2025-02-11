@@ -1,5 +1,6 @@
 ﻿//Dima and Petro
 
+using BLL.ApiTransferClients;
 using Vocaquill.AllWindow.Additionals;
 using Vocaquill.AllWindow.PageWindow;
 using Vocaquill.Commands;
@@ -25,7 +26,13 @@ namespace Vocaquill.AllWindow.ViewModels
                         if (_isRecording)
                             _audioRecorder.StartRecording();
                         else
+                        {
                             _audioRecorder.StopRecording();
+
+                            await Task.Delay(500);
+
+                            string audioText = await _audioToTextATC.GetTextFromAudioAsync(_audioRecorder.SavedAudioFilePath);
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -38,12 +45,15 @@ namespace Vocaquill.AllWindow.ViewModels
 
         public RecordViewModel() 
         {
-            this._audioRecorder = new AudioRecorder();
+            _audioRecorder = new AudioRecorder();
+            _audioToTextATC = new AudioToTextATC();
         }
 
         private BaseCommand _recordCommand;
 
         private bool _isRecording;
+
         private AudioRecorder _audioRecorder;
+        private AudioToTextATC _audioToTextATC;
     }
 }

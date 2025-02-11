@@ -19,12 +19,12 @@ namespace DAL.ApiClients
         /// <exception cref="Exception">
         /// Thrown if the server returns an error response or if the response structure is invalid.
         /// </exception>
-        public async Task<string> GetTextFromAudioAsync(string filePath, string serverFileName)
+        public async Task<string> GetTextFromAudioAsync(string filePath)
         {
             using var content = new MultipartFormDataContent();
             using var fileStream = File.OpenRead(filePath);
 
-            content.Add(new StreamContent(fileStream), "file", $"{serverFileName}.mp3");
+            content.Add(new StreamContent(fileStream), "file", $"{Guid.NewGuid()}.mp3");
 
             HttpResponseMessage response;
 

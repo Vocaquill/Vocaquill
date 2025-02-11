@@ -6,11 +6,14 @@ namespace Vocaquill.AllWindow.Additionals
 {
     public class AudioRecorder
     {
+
+        public string SavedAudioFilePath { get; set; }
+
         public AudioRecorder()
         {
             Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), "Records"));
 
-            _convertedFilePath = Path.Combine(Directory.GetCurrentDirectory(), Path.Combine("Records", "recorded_audio_16khz.wav")); ;
+            SavedAudioFilePath = Path.Combine(Directory.GetCurrentDirectory(), Path.Combine("Records", "recorded_audio_16khz.wav")); ;
             _outputFilePath = Path.Combine(Directory.GetCurrentDirectory(), Path.Combine("Records", "recorded_audio.wav"));
         }
         public Task StartRecording()
@@ -29,7 +32,7 @@ namespace Vocaquill.AllWindow.Additionals
                 _writer?.Dispose();
                 _capture?.Dispose();
 
-                ConvertWavTo16KHzMono(_outputFilePath, _convertedFilePath);
+                ConvertWavTo16KHzMono(_outputFilePath, SavedAudioFilePath);
                 DeleteOriginalFile(_outputFilePath);
                 _recordingStoppedTcs.SetResult(true);
             };
@@ -43,7 +46,6 @@ namespace Vocaquill.AllWindow.Additionals
             if (_capture != null)
             {
                 _capture.StopRecording();
-                Thread.Sleep(500);
                 await _recordingStoppedTcs.Task;
             }
         }
@@ -71,7 +73,6 @@ namespace Vocaquill.AllWindow.Additionals
         private WasapiLoopbackCapture _capture;
         private WaveFileWriter _writer;
         private string _outputFilePath;
-        private string _convertedFilePath;
         private TaskCompletionSource<bool> _recordingStoppedTcs;
     }
 }

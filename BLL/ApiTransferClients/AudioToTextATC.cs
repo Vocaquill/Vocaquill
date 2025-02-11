@@ -9,9 +9,9 @@ namespace BLL.ApiTransferClients
             this._apiClient = new AudioToTextApiClient();
         }
 
-        public async Task<string> GetTextFromAudioAsync(string filePath, string serverFileName) 
+        public async Task<string> GetTextFromAudioAsync(string filePath) 
         {
-            return await this._apiClient.GetTextFromAudioAsync(filePath, serverFileName);
+            return await this._apiClient.GetTextFromAudioAsync(filePath);
         }
 
         private AudioToTextApiClient _apiClient;
