@@ -32,12 +32,16 @@ namespace Vocaquill.AllWindow.ViewModels
 
                             await Task.Delay(500);
 
+                            FunctionalityPage.ChangeFunctionality(false);
+
                             string audioText = await _audioToTextATC.GetTextFromAudioAsync(_audioRecorder.SavedAudioFilePath);
                             
                             AiQuestionSettingsATD question = new AiQuestionSettingsATD() { Language = "Ukrainian", LectureTopic = "Determine automatically", TeacherText = audioText, SummarySize = "large (1-2 A4 page)" }; // In the future, allow the user to choose the theme and size himself
                             string aiAnswer = await _geminiATC.CreateSummaryAsync(question);
 
                             FunctionalityPage.ShowInfo(aiAnswer);
+
+                            FunctionalityPage.ChangeFunctionality(true);
                         }
                     }
                     catch (Exception ex)

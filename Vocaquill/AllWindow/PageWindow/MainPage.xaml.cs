@@ -61,6 +61,17 @@ namespace Vocaquill.AllWindow.PageWindow
         {
             this.LectureTextBox.Text = text;
         }
+        public void ChangeFunctionality(bool state) 
+        {
+            if (state)
+            {
+                this.loadingGrid.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                this.loadingGrid.Visibility = Visibility.Visible;
+            }
+        }
 
         private void InitializeTimer() 
         {
