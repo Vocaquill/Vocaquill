@@ -1,4 +1,6 @@
-﻿namespace DAL.ApiModels.Requests
+﻿using DAL.ApiModels.Additionals;
+
+namespace DAL.ApiModels.Requests
 {
     public class GeminiPostRequest
     {
