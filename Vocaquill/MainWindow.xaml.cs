@@ -1,7 +1,10 @@
-﻿using System.ComponentModel;
+﻿using BLL.Models;
+using System.ComponentModel;
 using System.Text;
 using System.Windows;
 using Vocaquill.AllWindow.PageWindow;
+using Vocaquill.Singleton;
+using Vocaquill.AllWindow.ViewModels;
 
 namespace Vocaquill
 {
@@ -10,7 +13,7 @@ namespace Vocaquill
         public MainWindow()
         {
             InitializeComponent();
-            modalFrame.Content = new LoginWindowPage();
+            modalFrame.Content = new LoginWindowPage(new UserViewModel());
         }
     }
 }
