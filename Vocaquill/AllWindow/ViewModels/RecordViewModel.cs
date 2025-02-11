@@ -1,6 +1,7 @@
 ﻿//Dima and Petro
 
 using BLL.ApiTransferClients;
+using BLL.ApiTransferModels;
 using Vocaquill.AllWindow.Additionals;
 using Vocaquill.AllWindow.PageWindow;
 using Vocaquill.Commands;
@@ -24,14 +25,19 @@ namespace Vocaquill.AllWindow.ViewModels
                         FunctionalityPage.ChangeTimerState();
 
                         if (_isRecording)
-                            _audioRecorder.StartRecording();
+                            await _audioRecorder.StartRecordingAsync();
                         else
                         {
-                            _audioRecorder.StopRecording();
+                            await _audioRecorder.StopRecordingAsync();
 
                             await Task.Delay(500);
 
                             string audioText = await _audioToTextATC.GetTextFromAudioAsync(_audioRecorder.SavedAudioFilePath);
+                            
+                            AiQuestionSettingsATD question = new AiQuestionSettingsATD() { Language = "Ukrainian", LectureTopic = "Determine automatically", TeacherText = audioText, SummarySize = "large (1-2 A4 page)" }; // In the future, allow the user to choose the theme and size himself
+                            string aiAnswer = await _geminiATC.CreateSummaryAsync(question);
+
+                            FunctionalityPage.ShowInfo(aiAnswer);
                         }
                     }
                     catch (Exception ex)
@@ -47,6 +53,7 @@ namespace Vocaquill.AllWindow.ViewModels
         {
             _audioRecorder = new AudioRecorder();
             _audioToTextATC = new AudioToTextATC();
+            _geminiATC = new GeminiATC();
         }
 
         private BaseCommand _recordCommand;
@@ -55,5 +62,6 @@ namespace Vocaquill.AllWindow.ViewModels
 
         private AudioRecorder _audioRecorder;
         private AudioToTextATC _audioToTextATC;
+        private GeminiATC _geminiATC;
     }
 }

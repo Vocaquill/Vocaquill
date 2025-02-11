@@ -16,7 +16,7 @@ namespace Vocaquill.AllWindow.Additionals
             SavedAudioFilePath = Path.Combine(Directory.GetCurrentDirectory(), Path.Combine("Records", "recorded_audio_16khz.wav")); ;
             _outputFilePath = Path.Combine(Directory.GetCurrentDirectory(), Path.Combine("Records", "recorded_audio.wav"));
         }
-        public Task StartRecording()
+        public Task StartRecordingAsync()
         {
             var device = new MMDeviceEnumerator().GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
             _capture = new WasapiLoopbackCapture(device);
@@ -41,7 +41,7 @@ namespace Vocaquill.AllWindow.Additionals
             return Task.CompletedTask;
         }
 
-        public async Task StopRecording()
+        public async Task StopRecordingAsync()
         {
             if (_capture != null)
             {

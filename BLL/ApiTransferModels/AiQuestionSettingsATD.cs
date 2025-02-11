@@ -5,5 +5,6 @@
         public string LectureTopic { get; set; } = String.Empty;
         public string TeacherText { get; set; } = String.Empty;
         public string Language { get; set; } = String.Empty;
+        public string SummarySize { get; set; } = String.Empty;
     }
 }
