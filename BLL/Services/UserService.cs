@@ -25,7 +25,7 @@ namespace BLL.Services
                 cfg.CreateMap<User, UserDTO>();
             }).CreateMapper();
         }
-
+        
         public async Task AddUserAsync(UserDTO user)
         {
             await _repository.AddUserAsync(_mapper.Map<User>(user));

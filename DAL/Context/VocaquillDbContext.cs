@@ -8,7 +8,10 @@ namespace DAL.Context
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Query> Queries { get; set; }
-        public VocaquillDbContext(DbContextOptions<VocaquillDbContext> options) : base(options) { }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        => optionsBuilder.UseNpgsql(DataAccessConstants.ConnectionString);
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
