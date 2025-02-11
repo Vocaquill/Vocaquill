@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using Vocaquill.AllWindow.ViewModels;
 
 namespace Vocaquill.AllWindow.PageWindow
 {
@@ -26,28 +27,20 @@ namespace Vocaquill.AllWindow.PageWindow
         private TimeSpan timeElapsed;
         private bool isRecording = false;
         #endregion
+
         private SettingWindowPage settWinPage;
-        public MainPage()
+        public MainPage(RecordViewModel recordVM)
         {
             InitializeComponent();
+            InitializeTimer();
+
             settWinPage = new SettingWindowPage();
-            #region Timer initialize
-            timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(1);
-            timer.Tick += Timer_Tick;
-            #endregion
-        }
-        private void Timer_Tick(object sender, EventArgs e)
-        {
-            timeElapsed = timeElapsed.Add(TimeSpan.FromSeconds(1));
-            this.TimerRecordTB.Text = timeElapsed.ToString(@"mm\:ss");
-        }
-        private void SettingsBorder_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            (App.Current.MainWindow as MainWindow).pageFrame.Navigate(settWinPage);
+
+            recordVM.FunctionalityPage = this;
+            this.DataContext = recordVM;
         }
 
-        private void StartStopRecordBT_Click(object sender, RoutedEventArgs e)
+        public void ChangeTimerState()
         {
             if (!isRecording)
             {
@@ -60,9 +53,41 @@ namespace Vocaquill.AllWindow.PageWindow
             else
             {
                 timer.Stop();
-                StartStopRecordBT.Content = "Старт запису";
+                StartStopRecordBT.Content = "Новий запис";
                 isRecording = false;
             }
+        }
+        public void ShowInfo(string text) 
+        {
+            this.LectureTextBox.Text = text;
+        }
+        public void ChangeFunctionality(bool state) 
+        {
+            if (state)
+            {
+                this.loadingGrid.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                this.loadingGrid.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void InitializeTimer() 
+        {
+            timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Tick += Timer_Tick;
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            timeElapsed = timeElapsed.Add(TimeSpan.FromSeconds(1));
+            this.TimerRecordTB.Text = timeElapsed.ToString(@"mm\:ss");
+        }
+        private void SettingsBorder_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            (App.Current.MainWindow as MainWindow).pageFrame.Navigate(settWinPage);
         }
 
         private void LogoutBT_Click(object sender, RoutedEventArgs e)
