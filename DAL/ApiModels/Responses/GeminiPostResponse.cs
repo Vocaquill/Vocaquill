@@ -1,4 +1,6 @@
-﻿namespace DAL.ApiModels.Responses
+﻿using DAL.ApiModels.Additionals;
+
+namespace DAL.ApiModels.Responses
 {
     public class GeminiPostResponse
     {

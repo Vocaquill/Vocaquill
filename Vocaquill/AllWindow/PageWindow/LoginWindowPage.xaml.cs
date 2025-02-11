@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Vocaquill.AllWindow.ViewModels;
 
 namespace Vocaquill.AllWindow.PageWindow
 {
@@ -20,19 +21,15 @@ namespace Vocaquill.AllWindow.PageWindow
     /// </summary>
     public partial class LoginWindowPage : Page
     {
-        public LoginWindowPage()
+        public LoginWindowPage(UserViewModel UserView)
         {
             InitializeComponent();
+            this.DataContext = UserView;
         }
-        private void CloseModal()
-        {
-            var mainWindow = (MainWindow)Application.Current.MainWindow;
-            mainWindow.modalFrame.Navigate(new MainPage());
-        }
-        private void LoginBT_Click(object sender, RoutedEventArgs e)
-        {
-            CloseModal();
-
-        }
+        //private void CloseModal()
+        //{
+        //    var mainWindow = (MainWindow)Application.Current.MainWindow;
+        //    mainWindow.modalFrame.Navigate(new MainPage());
+        //}
     }
 }
