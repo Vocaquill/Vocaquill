@@ -19,7 +19,13 @@ namespace Vocaquill.AllWindow.ViewModels
                 {
                     try
                     {
+                        _isRecording = !_isRecording;
                         FunctionalityPage.ChangeTimerState();
+
+                        if (_isRecording)
+                            _audioRecorder.StartRecording();
+                        else
+                            _audioRecorder.StopRecording();
                     }
                     catch (Exception ex)
                     {
@@ -30,6 +36,14 @@ namespace Vocaquill.AllWindow.ViewModels
         }
         #endregion
 
+        public RecordViewModel() 
+        {
+            this._audioRecorder = new AudioRecorder();
+        }
+
         private BaseCommand _recordCommand;
+
+        private bool _isRecording;
+        private AudioRecorder _audioRecorder;
     }
 }
