@@ -1,7 +1,9 @@
-﻿using System.ComponentModel;
+﻿using BLL.Models;
+using System.ComponentModel;
 using System.Text;
 using System.Windows;
 using Vocaquill.AllWindow.PageWindow;
+using Vocaquill.Singleton;
 
 namespace Vocaquill
 {
