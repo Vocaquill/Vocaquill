@@ -81,7 +81,7 @@
             <StackPanel.Effect>
                 <DropShadowEffect Color="Black" BlurRadius="8" ShadowDepth="2" Opacity="0.3"/>
             </StackPanel.Effect>
-            <Button Content="Старт запису" Name="StartStopRecordBT" Click="StartStopRecordBT_Click"/>
+            <Button Content="Старт запису" Name="StartStopRecordBT" Command="{Binding Path=RecordCommand}"/>
             <TextBlock Background="WhiteSmoke" FontSize="18" Name="TimerRecordTB" Text="00:00"/>
             <Border Margin="10,2,2,2" Width="40" Height="40" Cursor="Hand"
                 MouseDown="SettingsBorder_MouseDown">
