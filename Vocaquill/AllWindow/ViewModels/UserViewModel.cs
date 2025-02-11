@@ -16,7 +16,7 @@ namespace Vocaquill.AllWindow.ViewModels
         private void CloseModal()
         {
             var mainWindow = (MainWindow)Application.Current.MainWindow;
-            mainWindow.modalFrame.Navigate(new MainPage());
+            //mainWindow.modalFrame.Navigate(new MainPage());
         }
         public BaseCommand LoginInProggram
         {
