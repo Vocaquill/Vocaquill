@@ -100,5 +100,23 @@ namespace Vocaquill.AllWindow.PageWindow
             var mainWindow = (MainWindow)Application.Current.MainWindow;
             //mainWindow.modalFrame.Navigate(new LoginWindowPage());            --------------------------------
         }
+
+        private void autoSettingsCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            this.topicTB.Text = "Визначити автоматично";
+            this.sumSizeTB.Text = "Великий (1-2 листки A4)";
+            this.sumSizeTB.Text = "Українська";
+
+            this.langTB.IsEnabled = false;
+            this.sumSizeTB.IsEnabled = false;
+            this.topicTB.IsEnabled = false;
+        }
+
+        private void autoSettingsCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            this.langTB.IsEnabled = true;
+            this.sumSizeTB.IsEnabled = true;
+            this.topicTB.IsEnabled = true;
+        }
     }
 }
