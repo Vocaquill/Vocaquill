@@ -3,6 +3,7 @@
 using BLL.ApiTransferClients;
 using BLL.ApiTransferModels;
 using BLL.Models;
+using BLL.PDFWriter;
 using Vocaquill.AllWindow.Additionals;
 using Vocaquill.AllWindow.PageWindow;
 using Vocaquill.Commands;
@@ -41,6 +42,8 @@ namespace Vocaquill.AllWindow.ViewModels
                             
                             AiQuestionSettingsATD question = new AiQuestionSettingsATD() { Language = "Ukrainian", LectureTopic = "Determine automatically", TeacherText = audioText, SummarySize = "large (1-2 A4 page)" }; // In the future, allow the user to choose the theme and size himself
                             string aiAnswer = await _geminiATC.CreateSummaryAsync(question);
+
+                            CreatePDF.TextToPDF("Text.pdf", aiAnswer);
 
                             FunctionalityPage.ShowInfo(aiAnswer);
 
