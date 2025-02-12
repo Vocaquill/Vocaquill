@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Vocaquill.AllWindow.ViewModels;
 
 namespace Vocaquill.AllWindow.PageWindow
 {
@@ -20,9 +21,10 @@ namespace Vocaquill.AllWindow.PageWindow
     /// </summary>
     public partial class RegisterWindowPage : Page
     {
-        public RegisterWindowPage()
+        public RegisterWindowPage(UserViewModel userView)
         {
             InitializeComponent();
+            this.DataContext = userView;
         }
     }
 }

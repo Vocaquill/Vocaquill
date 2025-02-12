@@ -13,7 +13,7 @@ namespace Vocaquill
         public MainWindow()
         {
             InitializeComponent();
-            modalFrame.Content = new LoginWindowPage(new UserViewModel());
+            modalFrame.Content = new LoginWindowPage(new UserViewModel(DBSingleton.Instance));
         }
     }
 }

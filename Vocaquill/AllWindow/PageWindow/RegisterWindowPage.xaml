@@ -47,15 +47,15 @@
                 <TextBlock TextAlignment="Left" Foreground="Gray">Будь ласка введіть свої данні</TextBlock>
                 <TextBlock TextAlignment="Left" FontSize="20">Реєстрація</TextBlock>
                 <TextBlock TextAlignment="Left">Логін</TextBlock>
-                <TextBox x:Name="tb_login_name" Text="{Binding Path=TempUser.Username}" ToolTip="Введіть ваш логін" ></TextBox>
+                <TextBox Text="{Binding Path=User_register.Login}" ToolTip="Введіть ваш логін" ></TextBox>
                 <TextBlock TextAlignment="Left">Пароль</TextBlock>
-                <TextBox x:Name="tb_login_password" Text="{Binding Path=TempUser.Password}" ToolTip="Введіть ваш пароль" ></TextBox>
-                <TextBlock TextAlignment="Left">Повне імя (ПІБ)</TextBlock>
-                <TextBox></TextBox>
+                <TextBox Text="{Binding Path=User_register.Password}" ToolTip="Введіть ваш пароль" ></TextBox>
+                <!--<TextBlock TextAlignment="Left">Повне імя</TextBlock>
+                <TextBox Text="{Binding Path=User_register.Name}" ToolTip="Введіть ваш пароль" ></TextBox>-->
                 <TextBlock TextAlignment="Left">Ваша пошта</TextBlock>
-                <TextBox></TextBox>
+                <TextBox Text="{Binding Path=User_register.Email}" ToolTip="Введіть пошту" ></TextBox>
 
-                <Button  Foreground="White" Name="LoginBT">Зареєструватися</Button>
+                <Button  Foreground="White" Command="{Binding Path=RegisterInProggram}">Зареєструватися</Button>
             </StackPanel>
         </Border>
     </Grid>
