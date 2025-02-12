@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BLL.Interfaces;
+using BLL.Mapping;
 using BLL.Models;
 using DAL.Interfaces;
 using DAL.Models;
@@ -19,11 +20,7 @@ namespace BLL.Services
         public QueryService(IQueryRepository repository)
         {
             _repository = repository;
-            _mapper = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<QueryDTO, Query>();
-                cfg.CreateMap<Query, QueryDTO>();
-            }).CreateMapper();
+            _mapper = MapperConfigurator.Mapper;
         }
 
         public async Task AddQueryAsync(QueryDTO query)
