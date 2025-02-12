@@ -5,6 +5,7 @@ using System.Windows;
 using Vocaquill.AllWindow.PageWindow;
 using Vocaquill.Singleton;
 using Vocaquill.AllWindow.ViewModels;
+using System.Windows.Controls;
 
 namespace Vocaquill
 {
@@ -14,6 +15,11 @@ namespace Vocaquill
         {
             InitializeComponent();
             modalFrame.Content = new LoginWindowPage(new UserViewModel());
+        }
+
+        public void ChangePage(Page page) 
+        {
+            modalFrame.Navigate(page);
         }
     }
 }

@@ -13,20 +13,15 @@ namespace Vocaquill.AllWindow.ViewModels
 {
     public class UserViewModel
     {
-        private void CloseModal()
-        {
-            var mainWindow = (MainWindow)Application.Current.MainWindow;
-            //mainWindow.modalFrame.Navigate(new MainPage());
-        }
         public BaseCommand LoginInProggram
         {
             get
             {
-                return _testCommand ??= new BaseCommand(async _ =>
+                return _loginCommand ??= new BaseCommand(async _ =>
                 {
                     try
                     {
-                        
+                        _mainWindow.ChangePage(new MainPage(new RecordViewModel()));
                     }
                     catch
                     {
@@ -37,11 +32,10 @@ namespace Vocaquill.AllWindow.ViewModels
         }
         public UserViewModel()
         {
-            User = new UserDTO();
+            _mainWindow = (MainWindow)Application.Current.MainWindow;
         }
-        public UserDTO User { get; set; }
-        private IUserService _userService;
+        private MainWindow _mainWindow;
 
-        private BaseCommand _testCommand;
+        private BaseCommand _loginCommand;
     }
 }

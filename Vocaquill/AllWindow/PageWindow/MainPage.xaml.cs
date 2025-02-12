@@ -73,6 +73,11 @@ namespace Vocaquill.AllWindow.PageWindow
             }
         }
 
+        public void ShowRequestPopup(bool state) 
+        {
+            this.requestPopup.IsOpen = state;
+        }
+
         private void InitializeTimer() 
         {
             timer = new DispatcherTimer();

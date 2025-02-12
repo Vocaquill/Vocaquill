@@ -1,9 +1,5 @@
-﻿using BLL.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BLL.Models;
+using BLL.Services;
 
 namespace Vocaquill.Singleton
 {
@@ -15,6 +11,7 @@ namespace Vocaquill.Singleton
         public static DBSingleton Instance => _instance.Value;
 
         public DBService DBService { get; }
+        public UserDTO? CurrentUser { get; set; }
 
         private DBSingleton()
         {
