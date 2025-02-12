@@ -116,5 +116,25 @@
                 <TextBlock Style="{StaticResource LoadingTextStyle}">Зачекай, я думаю...</TextBlock>
             </StackPanel>
         </Grid>
+
+        <Popup x:Name="requestPopup" Placement="Center" StaysOpen="False">
+            <Border Background="White" BorderBrush="Black" BorderThickness="1" Padding="20" CornerRadius="10"
+                Width="300" Height="auto">
+                <StackPanel>
+                    <TextBlock Text="Тема лекції" FontWeight="Bold"/>
+                    <TextBox x:Name="LectureTopicTextBox"/>
+
+                    <TextBlock Text="Мова лекції" FontWeight="Bold"/>
+                    <TextBox x:Name="LectureLanguageTextBox"/>
+
+                    <TextBlock Text="Розмір конспекту" FontWeight="Bold"/>
+                    <TextBox x:Name="LectureSizeTextBox"/>
+
+                    <CheckBox x:Name="AutoSettingsCheckBox" Content="Обрати налаштування автоматично" Margin="0,10,0,10"/>
+
+                    <Button Content="Отримати результат"/>
+                </StackPanel>
+            </Border>
+        </Popup>
     </Grid>
 </Page>

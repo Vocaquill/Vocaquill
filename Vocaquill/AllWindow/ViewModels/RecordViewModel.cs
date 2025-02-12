@@ -30,6 +30,8 @@ namespace Vocaquill.AllWindow.ViewModels
                             await _audioRecorder.StartRecordingAsync();
                         else
                         {
+                            //FunctionalityPage.ShowRequestPopup(true);
+
                             await _audioRecorder.StopRecordingAsync();
                             await Task.Delay(500);
 
