@@ -47,15 +47,20 @@
                 <TextBlock TextAlignment="Left" Foreground="Gray">Будь ласка введіть свої данні</TextBlock>
                 <TextBlock TextAlignment="Left" FontSize="20">Ласкаво просимо назад</TextBlock>
                 <TextBlock TextAlignment="Left">Логін</TextBlock>
-                <TextBox x:Name="tb_login_name" Text="{Binding Path=User.Login}" ToolTip="Введіть ваш логін" ></TextBox>
+                <TextBox x:Name="tb_login_name" Text="{Binding Path=User_login.Login}" ToolTip="Введіть ваш логін" ></TextBox>
                 <TextBlock TextAlignment="Left">Пароль</TextBlock>
-                <TextBox x:Name="tb_login_password" Text="{Binding Path=User.Password}" ToolTip="Введіть ваш пароль" ></TextBox>
+                <TextBox x:Name="tb_login_password" Text="{Binding Path=User_login.Password}" ToolTip="Введіть ваш пароль" ></TextBox>
                 <TextBlock Margin="0" TextAlignment="Right" TextDecorations="Underline">
 
                 </TextBlock>
                 <Button  Foreground="White" Name="LoginBT" Command="{Binding Path=LoginInProggram}">Увійти</Button>
-                <TextBlock TextAlignment="Right" Foreground="Gray" FontSize="13">Немає облікового запису?
+                <TextBlock TextAlignment="Right" Foreground="Gray" FontSize="10">
+                    Немає облікового запису? 
+                    <Hyperlink Command="{Binding Path=NavigateCommand}">
+                        Створити новий
+                    </Hyperlink>
                 </TextBlock>
+                <TextBlock FontSize="14" Foreground="Red" Name="ErrorMessageTB" TextAlignment="Left" Text="{Binding ErrorMessage}"/>
             </StackPanel>
         </Border>
     </Grid>
