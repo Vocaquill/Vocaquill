@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BLL.Interfaces;
+using BLL.Mapping;
 using BLL.Models;
 using DAL.Interfaces;
 using DAL.Models;
@@ -19,11 +20,7 @@ namespace BLL.Services
         public UserService(IUserRepository repository)
         {
             _repository = repository;
-            _mapper = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<UserDTO, User>();
-                cfg.CreateMap<User, UserDTO>();
-            }).CreateMapper();
+            _mapper = MapperConfigurator.Mapper;
         }
         
         public async Task AddUserAsync(UserDTO user)
