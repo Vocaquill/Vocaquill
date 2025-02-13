@@ -36,7 +36,7 @@ namespace Vocaquill.AllWindow.ViewModels
                             await _audioRecorder.StopRecordingAsync();
                             await Task.Delay(500);
 
-                            FunctionalityPage.ShowRequestPopup(true);
+                            FunctionalityPage.ShowPromptSettings(true);
                         }
                     }
                     catch (Exception ex)
@@ -55,11 +55,16 @@ namespace Vocaquill.AllWindow.ViewModels
                 {
                     try
                     {
+                        FunctionalityPage.ShowPromptSettings(false);
+
+                        if (!IsValidQuestion(QuestionSettings))
+                            throw new Exception("Invalid question! Check all input fields");
+
                         FunctionalityPage.ChangeFunctionality(false);
 
                         string audioText = await _audioToTextATC.GetTextFromAudioAsync(_audioRecorder.SavedAudioFilePath);
+                        QuestionSettings.TeacherText = audioText;
 
-                        //AiQuestionSettingsATD question = new AiQuestionSettingsATD() { Language = "Ukrainian", LectureTopic = "Determine automatically", TeacherText = audioText, SummarySize = "large (1-2 A4 page)" }; // In the future, allow the user to choose the theme and size himself
                         string aiAnswer = await _geminiATC.CreateSummaryAsync(QuestionSettings);
 
                         CreatePDF.TextToPDF("Text.pdf", aiAnswer);
@@ -72,6 +77,7 @@ namespace Vocaquill.AllWindow.ViewModels
                     }
                     catch (Exception ex)
                     {
+                        FunctionalityPage.ChangeFunctionality(true);
                         DynamicDesigner.ShowErrorMessage(ex.Message);
                     }
                 });
@@ -105,6 +111,13 @@ namespace Vocaquill.AllWindow.ViewModels
 
             query.UserId = DBSingleton.Instance.CurrentUser.Id;
             await DBSingleton.Instance.DBService.QueryService.AddQueryAsync(query);
+        }
+
+        private bool IsValidQuestion(AiQuestionSettingsATD questionSettings)
+        {
+            return !String.IsNullOrEmpty(questionSettings.Language) && !String.IsNullOrWhiteSpace(questionSettings.Language)
+                && !String.IsNullOrEmpty(questionSettings.SummarySize) && !String.IsNullOrWhiteSpace(questionSettings.SummarySize)
+                && !String.IsNullOrEmpty(questionSettings.LectureTopic) && !String.IsNullOrWhiteSpace(questionSettings.LectureTopic);
         }
 
         private BaseCommand _recordCommand;
