@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms.VisualStyles;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -73,9 +74,9 @@ namespace Vocaquill.AllWindow.PageWindow
             }
         }
 
-        public void ShowRequestPopup(bool state) 
+        public void ShowPromptSettings(bool state) 
         {
-            this.requestPopup.IsOpen = state;
+            this.promptGrid.Visibility = (state)? Visibility.Visible : Visibility.Hidden;
         }
 
         private void InitializeTimer() 
@@ -99,6 +100,21 @@ namespace Vocaquill.AllWindow.PageWindow
         {
             var mainWindow = (MainWindow)Application.Current.MainWindow;
             //mainWindow.modalFrame.Navigate(new LoginWindowPage());            --------------------------------
+        }
+
+        private void autoSettingsCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            var question = (this.DataContext as RecordViewModel).QuestionSettings;
+
+            question.LectureTopic = "Determine automatically";
+            question.SummarySize = "Determine automatically";
+            question.Language = "Ukrainian";
+
+            this.langTB.Text = question.Language;
+            this.sumSizeTB.Text = question.SummarySize;
+            this.topicTB.Text = question.LectureTopic;
+
+            this.autoSettingsCheckBox.IsChecked = false;
         }
     }
 }

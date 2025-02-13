@@ -117,24 +117,24 @@
             </StackPanel>
         </Grid>
 
-        <Popup x:Name="requestPopup" Placement="Center" StaysOpen="False">
-            <Border Background="White" BorderBrush="Black" BorderThickness="1" Padding="20" CornerRadius="10"
+        <Grid x:Name="promptGrid" Grid.ColumnSpan="2" Grid.RowSpan="2" Background="White" Opacity="0.8" Visibility="Hidden">
+            <Border Background="White" BorderBrush="Black" BorderThickness="1" Padding="20" Margin="20" CornerRadius="10"
                 Width="300" Height="auto">
                 <StackPanel>
                     <TextBlock Text="Тема лекції" FontWeight="Bold"/>
-                    <TextBox x:Name="LectureTopicTextBox"/>
+                    <TextBox x:Name="topicTB" Text="{Binding Path=QuestionSettings.LectureTopic}"/>
 
                     <TextBlock Text="Мова лекції" FontWeight="Bold"/>
-                    <TextBox x:Name="LectureLanguageTextBox"/>
+                    <TextBox x:Name="langTB" Text="{Binding Path=QuestionSettings.Language}"/>
 
                     <TextBlock Text="Розмір конспекту" FontWeight="Bold"/>
-                    <TextBox x:Name="LectureSizeTextBox"/>
+                    <TextBox x:Name="sumSizeTB" Text="{Binding Path=QuestionSettings.SummarySize}"/>
 
-                    <CheckBox x:Name="AutoSettingsCheckBox" Content="Обрати налаштування автоматично" Margin="0,10,0,10"/>
+                    <CheckBox x:Name="autoSettingsCheckBox" Content="Обрати налаштування автоматично" Margin="0,10,0,10" Checked="autoSettingsCheckBox_Checked"/>
 
-                    <Button Content="Отримати результат"/>
+                    <Button Content="Отримати результат" Command="{Binding Path=CreateSummaryCommand}"/>
                 </StackPanel>
             </Border>
-        </Popup>
+        </Grid>
     </Grid>
 </Page>

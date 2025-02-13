@@ -15,6 +15,8 @@ namespace Vocaquill.AllWindow.ViewModels
     {
         public MainPage FunctionalityPage { get; set; }
 
+        public AiQuestionSettingsATD QuestionSettings { get; set; }
+
         #region CommandsReliasation
         public BaseCommand RecordCommand 
         {
@@ -31,25 +33,10 @@ namespace Vocaquill.AllWindow.ViewModels
                             await _audioRecorder.StartRecordingAsync();
                         else
                         {
-                            //FunctionalityPage.ShowRequestPopup(true);
-
                             await _audioRecorder.StopRecordingAsync();
                             await Task.Delay(500);
 
-                            FunctionalityPage.ChangeFunctionality(false);
-
-                            string audioText = await _audioToTextATC.GetTextFromAudioAsync(_audioRecorder.SavedAudioFilePath);
-                            
-                            AiQuestionSettingsATD question = new AiQuestionSettingsATD() { Language = "Ukrainian", LectureTopic = "Determine automatically", TeacherText = audioText, SummarySize = "large (1-2 A4 page)" }; // In the future, allow the user to choose the theme and size himself
-                            string aiAnswer = await _geminiATC.CreateSummaryAsync(question);
-
-                            CreatePDF.TextToPDF("Text.pdf", aiAnswer);
-
-                            FunctionalityPage.ShowInfo(aiAnswer);
-
-                            FunctionalityPage.ChangeFunctionality(true);
-
-                            await SaveQueryToDBAsync(new QueryDTO() { Name = question.LectureTopic, RequestTime = DateTime.Now.ToUniversalTime(), Request = question.ToString(), Response = aiAnswer });
+                            FunctionalityPage.ShowPromptSettings(true);
                         }
                     }
                     catch (Exception ex)
@@ -59,6 +46,43 @@ namespace Vocaquill.AllWindow.ViewModels
                 });
             }    
         }
+
+        public BaseCommand CreateSummaryCommand
+        {
+            get
+            {
+                return _createSummaryCommand ??= new BaseCommand(async _ =>
+                {
+                    try
+                    {
+                        FunctionalityPage.ShowPromptSettings(false);
+
+                        if (!IsValidQuestion(QuestionSettings))
+                            throw new Exception("Invalid question! Check all input fields");
+
+                        FunctionalityPage.ChangeFunctionality(false);
+
+                        string audioText = await _audioToTextATC.GetTextFromAudioAsync(_audioRecorder.SavedAudioFilePath);
+                        QuestionSettings.TeacherText = audioText;
+
+                        string aiAnswer = await _geminiATC.CreateSummaryAsync(QuestionSettings);
+
+                        CreatePDF.TextToPDF("Text.pdf", aiAnswer);
+
+                        FunctionalityPage.ShowInfo(aiAnswer);
+
+                        FunctionalityPage.ChangeFunctionality(true);
+
+                        await SaveQueryToDBAsync(new QueryDTO() { Name = QuestionSettings.LectureTopic, RequestTime = DateTime.Now.ToUniversalTime(), Request = $"Create summary {QuestionSettings.LectureTopic}", Response = aiAnswer });
+                    }
+                    catch (Exception ex)
+                    {
+                        FunctionalityPage.ChangeFunctionality(true);
+                        DynamicDesigner.ShowErrorMessage(ex.Message);
+                    }
+                });
+            }
+        }
         #endregion
 
         public RecordViewModel() 
@@ -66,6 +90,8 @@ namespace Vocaquill.AllWindow.ViewModels
             _audioRecorder = new AudioRecorder();
             _audioToTextATC = new AudioToTextATC();
             _geminiATC = new GeminiATC();
+
+            QuestionSettings = new AiQuestionSettingsATD();
         }
 
         private async Task SaveQueryToDBAsync(QueryDTO query)
@@ -87,7 +113,15 @@ namespace Vocaquill.AllWindow.ViewModels
             await DBSingleton.Instance.DBService.QueryService.AddQueryAsync(query);
         }
 
+        private bool IsValidQuestion(AiQuestionSettingsATD questionSettings)
+        {
+            return !String.IsNullOrEmpty(questionSettings.Language) && !String.IsNullOrWhiteSpace(questionSettings.Language)
+                && !String.IsNullOrEmpty(questionSettings.SummarySize) && !String.IsNullOrWhiteSpace(questionSettings.SummarySize)
+                && !String.IsNullOrEmpty(questionSettings.LectureTopic) && !String.IsNullOrWhiteSpace(questionSettings.LectureTopic);
+        }
+
         private BaseCommand _recordCommand;
+        private BaseCommand _createSummaryCommand;
 
         private bool _isRecording;
 
