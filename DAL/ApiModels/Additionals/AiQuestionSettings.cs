@@ -17,7 +17,7 @@
                    "H5 - 16pt (Subsections)\n" +
                    "H7 - Paragraph (Explanatory text)\n\n" +
                    "**Text Formatting Tags (Used only in paragraphs):**\n" +
-                   "B: - Bold, I: - Italic, U: - Underline, S: - Strikethrough (it can be used to highlight words in the middle of a sentence)\n\n" +
+                   "B: - Bold, I: - Italic, U: - Underline, S: - Strikethrough (These tags cannot be placed in the middle of a sentence, only as an addition to H1, H3, for example H1BP)\n\n" +
                    "**Expected Structure:**\n" +
                    "- `H1P: Lecture Title`\n" +
                    "- `H3P: Section 1`\n" +

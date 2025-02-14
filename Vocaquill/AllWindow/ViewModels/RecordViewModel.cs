@@ -4,6 +4,7 @@ using BLL.ApiTransferClients;
 using BLL.ApiTransferModels;
 using BLL.Models;
 using BLL.PDFWriter;
+using System.Diagnostics;
 using System.IO;
 using Vocaquill.AllWindow.Additionals;
 using Vocaquill.AllWindow.PageWindow;
@@ -31,13 +32,18 @@ namespace Vocaquill.AllWindow.ViewModels
                         FunctionalityPage.ChangeTimerState();
 
                         if (_isRecording)
+                        {
+                            FunctionalityPage.ChangeConvertBtState(false);
                             await _audioRecorder.StartRecordingAsync();
+                        }
                         else
                         {
                             await _audioRecorder.StopRecordingAsync();
                             await Task.Delay(500);
 
-                            FunctionalityPage.ShowPromptSettings(true);
+                            DynamicDesigner.ShowInfoMessage("Лекцію запиано, тепер ви можете згенерувати конспект");
+
+                            FunctionalityPage.ChangeConvertBtState(true);
                         }
                     }
                     catch (Exception ex)
@@ -115,12 +121,25 @@ namespace Vocaquill.AllWindow.ViewModels
 
                         DynamicDesigner.ShowInfoMessage($"Конспект збережено у файл: {fileName}");
 
+                        Process.Start("explorer.exe", directoryPath);
+
                     }
                     catch (Exception ex)
                     {
                         FunctionalityPage.ChangeFunctionality(true);
                         DynamicDesigner.ShowErrorMessage(ex.Message);
                     }
+                });
+            }
+        }
+
+        public BaseCommand ConfigQuestionCommand
+        {
+            get
+            {
+                return _configQuestionCommand ??= new BaseCommand(async _ =>
+                {
+                    FunctionalityPage.ShowPromptSettings(true);
                 });
             }
         }
@@ -139,19 +158,6 @@ namespace Vocaquill.AllWindow.ViewModels
 
         private async Task SaveQueryToDBAsync(QueryDTO query)
         {
-            // temp cod for testing
-            UserDTO userDTO = new UserDTO()
-            {
-                Login = "PetroUser",
-                Password = "SecurePass123",
-                Name = "Петро Тимчук",
-                Email = "petro.timchuk@example.com"
-            };
-
-            //await DBSingleton.Instance.DBService.UserService.AddUserAsync(userDTO);
-            DBSingleton.Instance.CurrentUser = await DBSingleton.Instance.DBService.UserService.GetUserByLoginAndPasswordAsync(userDTO.Login, userDTO.Password);
-            // end testing code
-
             query.UserId = DBSingleton.Instance.CurrentUser.Id;
             await DBSingleton.Instance.DBService.QueryService.AddQueryAsync(query);
         }
@@ -166,6 +172,7 @@ namespace Vocaquill.AllWindow.ViewModels
         private BaseCommand _recordCommand;
         private BaseCommand _createSummaryCommand;
         private BaseCommand _createPDFCommand;
+        private BaseCommand _configQuestionCommand;
 
         private bool _isRecording;
         private string _pdfSavePath;

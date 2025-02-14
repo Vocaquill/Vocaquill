@@ -116,5 +116,15 @@ namespace Vocaquill.AllWindow.PageWindow
 
             this.autoSettingsCheckBox.IsChecked = false;
         }
+
+        private void exitBT_Click(object sender, RoutedEventArgs e)
+        {
+            ShowPromptSettings(false);
+        }
+
+        public void ChangeConvertBtState(bool state)
+        {
+            this.convertBT.IsEnabled = state;
+        }
     }
 }
