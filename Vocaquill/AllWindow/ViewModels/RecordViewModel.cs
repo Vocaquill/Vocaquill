@@ -4,6 +4,7 @@ using BLL.ApiTransferClients;
 using BLL.ApiTransferModels;
 using BLL.Models;
 using BLL.PDFWriter;
+using System.IO;
 using Vocaquill.AllWindow.Additionals;
 using Vocaquill.AllWindow.PageWindow;
 using Vocaquill.Commands;
@@ -55,25 +56,65 @@ namespace Vocaquill.AllWindow.ViewModels
                 {
                     try
                     {
-                        FunctionalityPage.ShowPromptSettings(false);
-
                         if (!IsValidQuestion(QuestionSettings))
                             throw new Exception("Invalid question! Check all input fields");
+
+                        FunctionalityPage.ShowPromptSettings(false);
 
                         FunctionalityPage.ChangeFunctionality(false);
 
                         string audioText = await _audioToTextATC.GetTextFromAudioAsync(_audioRecorder.SavedAudioFilePath);
                         QuestionSettings.TeacherText = audioText;
 
-                        string aiAnswer = await _geminiATC.CreateSummaryAsync(QuestionSettings);
+                        _aiAnswer = await _geminiATC.CreateSummaryAsync(QuestionSettings);
 
-                        CreatePDF.TextToPDF("Text.pdf", aiAnswer);
-
-                        FunctionalityPage.ShowInfo(aiAnswer);
+                        FunctionalityPage.ShowInfo(_aiAnswer);
 
                         FunctionalityPage.ChangeFunctionality(true);
 
-                        await SaveQueryToDBAsync(new QueryDTO() { Name = QuestionSettings.LectureTopic, RequestTime = DateTime.Now.ToUniversalTime(), Request = $"Create summary {QuestionSettings.LectureTopic}", Response = aiAnswer });
+                        _currentQuery = new QueryDTO()
+                        {
+                            Name = QuestionSettings.LectureTopic,
+                            RequestTime = DateTime.Now.ToUniversalTime(),
+                            Request = $"Create summary {QuestionSettings.LectureTopic}",
+                            Response = _aiAnswer
+                        };
+
+                        await SaveQueryToDBAsync(_currentQuery);
+
+                        DynamicDesigner.ShowInfoMessage($"Конспект сформовано, ви можете його зберегти у pdf форматі");
+                    }
+                    catch (Exception ex)
+                    {
+                        FunctionalityPage.ChangeFunctionality(true);
+                        DynamicDesigner.ShowErrorMessage(ex.Message);
+                    }
+                });
+            }
+        }
+
+        public BaseCommand CreatePDFCommand
+        {
+            get
+            {
+                return _createPDFCommand ??= new BaseCommand(async _ =>
+                {
+                    try
+                    {
+
+                        string directoryPath = _pdfSavePath;
+                        if (!Directory.Exists(directoryPath))
+                        {
+                            Directory.CreateDirectory(directoryPath);
+                        }
+
+                        string fileName = $"{_currentQuery.Name}_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
+                        string filePath = Path.Combine(directoryPath, fileName);
+
+                        CreatePDF.TextToPDF(filePath, _aiAnswer);
+
+                        DynamicDesigner.ShowInfoMessage($"Конспект збережено у файл: {fileName}");
+
                     }
                     catch (Exception ex)
                     {
@@ -92,6 +133,8 @@ namespace Vocaquill.AllWindow.ViewModels
             _geminiATC = new GeminiATC();
 
             QuestionSettings = new AiQuestionSettingsATD();
+
+            _pdfSavePath = Path.Combine(Directory.GetCurrentDirectory(), "PDF_Summaries");
         }
 
         private async Task SaveQueryToDBAsync(QueryDTO query)
@@ -122,11 +165,16 @@ namespace Vocaquill.AllWindow.ViewModels
 
         private BaseCommand _recordCommand;
         private BaseCommand _createSummaryCommand;
+        private BaseCommand _createPDFCommand;
 
         private bool _isRecording;
+        private string _pdfSavePath;
+        private string _aiAnswer;
 
         private AudioRecorder _audioRecorder;
         private AudioToTextATC _audioToTextATC;
         private GeminiATC _geminiATC;
+
+        private QueryDTO _currentQuery;
     }
 }

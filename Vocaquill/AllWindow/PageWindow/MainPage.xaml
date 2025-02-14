@@ -102,7 +102,7 @@
         <DockPanel Grid.Row="1" Margin="10">
             <!-- Ліва панель із додатковим відступом і паддінгом -->
             <StackPanel DockPanel.Dock="Left" Width="220" Background="LightSteelBlue" Margin="0,0,10,0">
-                <Button Content="Генерація PDF"/>
+                <Button Content="Генерація PDF" Command="{Binding Path=CreatePDFCommand}"/>
             </StackPanel>
             <!-- Текстове поле в рамці -->
             <Border Background="White" BorderBrush="#FF007ACC" BorderThickness="1" CornerRadius="5">
