@@ -4,6 +4,11 @@ using BLL.ApiTransferClients;
 using BLL.ApiTransferModels;
 using BLL.Models;
 using BLL.PDFWriter;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
+using System.Text.RegularExpressions;
 using Vocaquill.AllWindow.Additionals;
 using Vocaquill.AllWindow.PageWindow;
 using Vocaquill.Commands;
@@ -16,6 +21,9 @@ namespace Vocaquill.AllWindow.ViewModels
         public MainPage FunctionalityPage { get; set; }
 
         public AiQuestionSettingsATD QuestionSettings { get; set; }
+
+        public ObservableCollection<QueryDTO> Queries { get; set; }
+        public QueryDTO SelectedQuery { get; set; }
 
         #region CommandsReliasation
         public BaseCommand RecordCommand 
@@ -30,13 +38,18 @@ namespace Vocaquill.AllWindow.ViewModels
                         FunctionalityPage.ChangeTimerState();
 
                         if (_isRecording)
+                        {
+                            FunctionalityPage.ChangeConvertBtState(false);
                             await _audioRecorder.StartRecordingAsync();
+                        }
                         else
                         {
                             await _audioRecorder.StopRecordingAsync();
                             await Task.Delay(500);
 
-                            FunctionalityPage.ShowPromptSettings(true);
+                            DynamicDesigner.ShowInfoMessage("Лекцію запиано, тепер ви можете згенерувати конспект");
+
+                            FunctionalityPage.ChangeConvertBtState(true);
                         }
                     }
                     catch (Exception ex)
@@ -55,31 +68,141 @@ namespace Vocaquill.AllWindow.ViewModels
                 {
                     try
                     {
-                        FunctionalityPage.ShowPromptSettings(false);
-
                         if (!IsValidQuestion(QuestionSettings))
                             throw new Exception("Invalid question! Check all input fields");
+
+                        FunctionalityPage.ShowPromptSettings(false);
 
                         FunctionalityPage.ChangeFunctionality(false);
 
                         string audioText = await _audioToTextATC.GetTextFromAudioAsync(_audioRecorder.SavedAudioFilePath);
                         QuestionSettings.TeacherText = audioText;
 
-                        string aiAnswer = await _geminiATC.CreateSummaryAsync(QuestionSettings);
+                        _aiAnswer = await _geminiATC.CreateSummaryAsync(QuestionSettings);
 
-                        CreatePDF.TextToPDF("Text.pdf", aiAnswer);
-
-                        FunctionalityPage.ShowInfo(aiAnswer);
+                        FunctionalityPage.ShowInfo(_aiAnswer);
 
                         FunctionalityPage.ChangeFunctionality(true);
 
-                        await SaveQueryToDBAsync(new QueryDTO() { Name = QuestionSettings.LectureTopic, RequestTime = DateTime.Now.ToUniversalTime(), Request = $"Create summary {QuestionSettings.LectureTopic}", Response = aiAnswer });
+                        SelectedQuery = new QueryDTO()
+                        {
+                            Name = Regex.Match(_aiAnswer, @"H1P:\s*(.*?)\n").Groups[1].Value,
+                            RequestTime = DateTime.Now.ToUniversalTime(),
+                            Request = $"Create summary {QuestionSettings.LectureTopic}",
+                            Response = _aiAnswer
+                        };
+
+                        await SaveQueryToDBAsync(SelectedQuery);
+
+                        DynamicDesigner.ShowInfoMessage($"Конспект сформовано, ви можете його зберегти у pdf форматі");
                     }
                     catch (Exception ex)
                     {
                         FunctionalityPage.ChangeFunctionality(true);
                         DynamicDesigner.ShowErrorMessage(ex.Message);
                     }
+                });
+            }
+        }
+
+        public BaseCommand CreatePDFCommand
+        {
+            get
+            {
+                return _createPDFCommand ??= new BaseCommand(async _ =>
+                {
+                    try
+                    {
+                        if (_aiAnswer == null || String.IsNullOrEmpty(_aiAnswer))
+                            throw new Exception("There is nothing to convert!");
+
+                        string directoryPath = _pdfSavePath;
+                        if (!Directory.Exists(directoryPath))
+                        {
+                            Directory.CreateDirectory(directoryPath);
+                        }
+
+                        string fileName = $"{SelectedQuery.Name}_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
+                        string filePath = Path.Combine(directoryPath, fileName);
+
+                        CreatePDF.TextToPDF(filePath, _aiAnswer);
+
+                        DynamicDesigner.ShowInfoMessage($"Конспект збережено у файл: {fileName}");
+
+                        Process.Start("explorer.exe", directoryPath);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        FunctionalityPage.ChangeFunctionality(true);
+                        DynamicDesigner.ShowErrorMessage(ex.Message);
+                    }
+                });
+            }
+        }
+
+        public BaseCommand DownloadPDFCommand
+        {
+            get
+            {
+                return _downloadPDFCommand ??= new BaseCommand(async _ =>
+                {
+                    try
+                    {
+                        if (SelectedQuery == null)
+                            throw new Exception("Select query first!");
+
+                        string directoryPath = _pdfSavePath;
+                        if (!Directory.Exists(directoryPath))
+                        {
+                            Directory.CreateDirectory(directoryPath);
+                        }
+
+                        string fileName = $"{SelectedQuery.Name}_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
+                        string filePath = Path.Combine(directoryPath, fileName);
+
+                        CreatePDF.TextToPDF(filePath, SelectedQuery.Response);
+
+                        DynamicDesigner.ShowInfoMessage($"Конспект збережено у файл: {fileName}");
+
+                        Process.Start("explorer.exe", directoryPath);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        FunctionalityPage.ChangeFunctionality(true);
+                        DynamicDesigner.ShowErrorMessage(ex.Message);
+                    }
+                });
+            }
+        }
+
+        public BaseCommand ConfigQuestionCommand
+        {
+            get
+            {
+                return _configQuestionCommand ??= new BaseCommand(async _ =>
+                {
+                    FunctionalityPage.ShowPromptSettings(true);
+                });
+            }
+        }
+
+        public BaseCommand ShowQuriesListCommand
+        {
+            get
+            {
+                return _showQuriesListCommand ??= new BaseCommand(async _ =>
+                {
+                    Queries.Clear();
+                    var tempQueries = (await DBSingleton.Instance.DBService.QueryService.GetQueriesByUserIdAsync(DBSingleton.Instance.CurrentUser.Id)).ToList();
+
+                    foreach (var item in tempQueries)
+                    {
+                        Queries.Add(item);
+                    }
+
+                    FunctionalityPage.ShowQueriesList(true);
                 });
             }
         }
@@ -92,23 +215,13 @@ namespace Vocaquill.AllWindow.ViewModels
             _geminiATC = new GeminiATC();
 
             QuestionSettings = new AiQuestionSettingsATD();
+            Queries = new ObservableCollection<QueryDTO>();
+
+            _pdfSavePath = Path.Combine(Directory.GetCurrentDirectory(), "PDF_Summaries");
         }
 
         private async Task SaveQueryToDBAsync(QueryDTO query)
         {
-            // temp cod for testing
-            UserDTO userDTO = new UserDTO()
-            {
-                Login = "PetroUser",
-                Password = "SecurePass123",
-                Name = "Петро Тимчук",
-                Email = "petro.timchuk@example.com"
-            };
-
-            //await DBSingleton.Instance.DBService.UserService.AddUserAsync(userDTO);
-            DBSingleton.Instance.CurrentUser = await DBSingleton.Instance.DBService.UserService.GetUserByLoginAndPasswordAsync(userDTO.Login, userDTO.Password);
-            // end testing code
-
             query.UserId = DBSingleton.Instance.CurrentUser.Id;
             await DBSingleton.Instance.DBService.QueryService.AddQueryAsync(query);
         }
@@ -122,8 +235,14 @@ namespace Vocaquill.AllWindow.ViewModels
 
         private BaseCommand _recordCommand;
         private BaseCommand _createSummaryCommand;
+        private BaseCommand _createPDFCommand;
+        private BaseCommand _downloadPDFCommand;
+        private BaseCommand _configQuestionCommand;
+        private BaseCommand _showQuriesListCommand;
 
         private bool _isRecording;
+        private string _pdfSavePath;
+        private string _aiAnswer;
 
         private AudioRecorder _audioRecorder;
         private AudioToTextATC _audioToTextATC;
