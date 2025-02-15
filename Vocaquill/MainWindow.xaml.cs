@@ -14,7 +14,7 @@ namespace Vocaquill
         public MainWindow()
         {
             InitializeComponent();
-            modalFrame.Content = new LoginWindowPage(new UserViewModel(DBSingleton.Instance));
+            modalFrame.Content = new LoginWindowPage(new UserViewModel());
         }
 
         public void ChangePage(Page page) 

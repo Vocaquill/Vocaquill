@@ -99,7 +99,7 @@ namespace Vocaquill.AllWindow.PageWindow
         private void LogoutBT_Click(object sender, RoutedEventArgs e)
         {
             var mainWindow = (MainWindow)Application.Current.MainWindow;
-            //mainWindow.modalFrame.Navigate(new LoginWindowPage());            --------------------------------
+            mainWindow.modalFrame.Navigate(new LoginWindowPage(new UserViewModel()));
         }
 
         private void autoSettingsCheckBox_Checked(object sender, RoutedEventArgs e)
