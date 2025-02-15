@@ -106,7 +106,7 @@
             </StackPanel>
             <!-- Текстове поле в рамці -->
             <Border Background="White" BorderBrush="#FF007ACC" BorderThickness="1" CornerRadius="5">
-                <TextBox Name="LectureTextBox"/>
+                <TextBox Name="LectureTextBox" IsReadOnly="True"/>
             </Border>
         </DockPanel>
 

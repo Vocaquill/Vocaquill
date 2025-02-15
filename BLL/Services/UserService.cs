@@ -4,6 +4,7 @@ using BLL.Mapping;
 using BLL.Models;
 using DAL.Interfaces;
 using DAL.Models;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,7 +56,24 @@ namespace BLL.Services
 
         public async Task<UserDTO> GetUserByLoginAndPasswordAsync(string login, string password)
         {
-            return (await this._repository.GetUsersAsync()).Select(c => this._mapper.Map<UserDTO>(c)).First(lp => lp.Login == login && lp.Password == password);
+            User user = (await this._repository.GetUsersAsync()).First(u => u.Login == login);
+
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+
+            var passwordHasher = new PasswordHasher<User>();
+            var result = passwordHasher.VerifyHashedPassword(user, user.Password, password);
+
+            if (result == PasswordVerificationResult.Success)
+            {
+                return this._mapper.Map<UserDTO>(user);
+            }
+            else
+            {
+                throw new Exception("Invalid password");
+            }
         }
 
         public async Task UpdateUserAsync(int id, UserDTO user)
