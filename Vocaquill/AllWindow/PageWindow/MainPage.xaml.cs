@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BLL.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -78,6 +79,10 @@ namespace Vocaquill.AllWindow.PageWindow
         {
             this.promptGrid.Visibility = (state)? Visibility.Visible : Visibility.Hidden;
         }
+        public void ShowQueriesList(bool state)
+        {
+            this.queryHistoryGrid.Visibility = (state) ? Visibility.Visible : Visibility.Hidden;
+        }
 
         private void InitializeTimer() 
         {
@@ -125,6 +130,26 @@ namespace Vocaquill.AllWindow.PageWindow
         public void ChangeConvertBtState(bool state)
         {
             this.convertBT.IsEnabled = state;
+        }
+
+        private void exitHistoryBT_Click(object sender, RoutedEventArgs e)
+        {
+            ShowQueriesList(false);
+        }
+
+        private void queryList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (sender is ListBox listBox)
+            {
+                if (listBox.SelectedItem is QueryDTO selectedQuery)
+                {
+                    this.downloadItemBT.IsEnabled = true;
+                }
+                else
+                {
+                    this.downloadItemBT.IsEnabled = false;
+                }
+            }
         }
     }
 }

@@ -4,8 +4,11 @@ using BLL.ApiTransferClients;
 using BLL.ApiTransferModels;
 using BLL.Models;
 using BLL.PDFWriter;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Text.RegularExpressions;
 using Vocaquill.AllWindow.Additionals;
 using Vocaquill.AllWindow.PageWindow;
 using Vocaquill.Commands;
@@ -18,6 +21,9 @@ namespace Vocaquill.AllWindow.ViewModels
         public MainPage FunctionalityPage { get; set; }
 
         public AiQuestionSettingsATD QuestionSettings { get; set; }
+
+        public ObservableCollection<QueryDTO> Queries { get; set; }
+        public QueryDTO SelectedQuery { get; set; }
 
         #region CommandsReliasation
         public BaseCommand RecordCommand 
@@ -78,15 +84,15 @@ namespace Vocaquill.AllWindow.ViewModels
 
                         FunctionalityPage.ChangeFunctionality(true);
 
-                        _currentQuery = new QueryDTO()
+                        SelectedQuery = new QueryDTO()
                         {
-                            Name = QuestionSettings.LectureTopic,
+                            Name = Regex.Match(_aiAnswer, @"H1P:\s*(.*?)\n").Groups[1].Value,
                             RequestTime = DateTime.Now.ToUniversalTime(),
                             Request = $"Create summary {QuestionSettings.LectureTopic}",
                             Response = _aiAnswer
                         };
 
-                        await SaveQueryToDBAsync(_currentQuery);
+                        await SaveQueryToDBAsync(SelectedQuery);
 
                         DynamicDesigner.ShowInfoMessage($"Конспект сформовано, ви можете його зберегти у pdf форматі");
                     }
@@ -107,6 +113,8 @@ namespace Vocaquill.AllWindow.ViewModels
                 {
                     try
                     {
+                        if (_aiAnswer == null || String.IsNullOrEmpty(_aiAnswer))
+                            throw new Exception("There is nothing to convert!");
 
                         string directoryPath = _pdfSavePath;
                         if (!Directory.Exists(directoryPath))
@@ -114,10 +122,46 @@ namespace Vocaquill.AllWindow.ViewModels
                             Directory.CreateDirectory(directoryPath);
                         }
 
-                        string fileName = $"{_currentQuery.Name}_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
+                        string fileName = $"{SelectedQuery.Name}_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
                         string filePath = Path.Combine(directoryPath, fileName);
 
                         CreatePDF.TextToPDF(filePath, _aiAnswer);
+
+                        DynamicDesigner.ShowInfoMessage($"Конспект збережено у файл: {fileName}");
+
+                        Process.Start("explorer.exe", directoryPath);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        FunctionalityPage.ChangeFunctionality(true);
+                        DynamicDesigner.ShowErrorMessage(ex.Message);
+                    }
+                });
+            }
+        }
+
+        public BaseCommand DownloadPDFCommand
+        {
+            get
+            {
+                return _downloadPDFCommand ??= new BaseCommand(async _ =>
+                {
+                    try
+                    {
+                        if (SelectedQuery == null)
+                            throw new Exception("Select query first!");
+
+                        string directoryPath = _pdfSavePath;
+                        if (!Directory.Exists(directoryPath))
+                        {
+                            Directory.CreateDirectory(directoryPath);
+                        }
+
+                        string fileName = $"{SelectedQuery.Name}_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
+                        string filePath = Path.Combine(directoryPath, fileName);
+
+                        CreatePDF.TextToPDF(filePath, SelectedQuery.Response);
 
                         DynamicDesigner.ShowInfoMessage($"Конспект збережено у файл: {fileName}");
 
@@ -143,6 +187,25 @@ namespace Vocaquill.AllWindow.ViewModels
                 });
             }
         }
+
+        public BaseCommand ShowQuriesListCommand
+        {
+            get
+            {
+                return _showQuriesListCommand ??= new BaseCommand(async _ =>
+                {
+                    Queries.Clear();
+                    var tempQueries = (await DBSingleton.Instance.DBService.QueryService.GetQueriesByUserIdAsync(DBSingleton.Instance.CurrentUser.Id)).ToList();
+
+                    foreach (var item in tempQueries)
+                    {
+                        Queries.Add(item);
+                    }
+
+                    FunctionalityPage.ShowQueriesList(true);
+                });
+            }
+        }
         #endregion
 
         public RecordViewModel() 
@@ -152,6 +215,7 @@ namespace Vocaquill.AllWindow.ViewModels
             _geminiATC = new GeminiATC();
 
             QuestionSettings = new AiQuestionSettingsATD();
+            Queries = new ObservableCollection<QueryDTO>();
 
             _pdfSavePath = Path.Combine(Directory.GetCurrentDirectory(), "PDF_Summaries");
         }
@@ -172,7 +236,9 @@ namespace Vocaquill.AllWindow.ViewModels
         private BaseCommand _recordCommand;
         private BaseCommand _createSummaryCommand;
         private BaseCommand _createPDFCommand;
+        private BaseCommand _downloadPDFCommand;
         private BaseCommand _configQuestionCommand;
+        private BaseCommand _showQuriesListCommand;
 
         private bool _isRecording;
         private string _pdfSavePath;
@@ -181,7 +247,5 @@ namespace Vocaquill.AllWindow.ViewModels
         private AudioRecorder _audioRecorder;
         private AudioToTextATC _audioToTextATC;
         private GeminiATC _geminiATC;
-
-        private QueryDTO _currentQuery;
     }
 }
