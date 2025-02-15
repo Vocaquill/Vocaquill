@@ -17,7 +17,6 @@ namespace DAL.Models
         public string Login { get; set; }
 
         [Required]
-        [MaxLength(50, ErrorMessage = "Login must be 50 characters or less"), MinLength(8, ErrorMessage = "Login must be 8 characters or more")]
         public string Password { get; set; }
 
         [Required]
