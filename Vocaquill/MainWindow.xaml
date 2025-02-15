@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Vocaquill"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" ResizeMode="NoResize">
+        Title="Vocaquill" Height="450" Width="800" ResizeMode="NoResize"
+        Icon="/Images/VocaquillIcon.jpg">
     <Grid>
         <Frame Name="modalFrame" NavigationUIVisibility="Hidden"></Frame>
         <Frame Name="pageFrame" NavigationUIVisibility="Hidden"></Frame>
