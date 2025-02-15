@@ -100,11 +100,11 @@ namespace BLL.PDFWriter
 
                         foreach (var r in rows)
                         {
-                            column.Item().Text(async t =>
+                            column.Item().Text(t =>
                             {
                                 foreach (var pair in r.Pairs)
                                 {
-                                    await SetParam(t, pair.Text, pair.Param);
+                                    SetParam(t, pair.Text, pair.Param);
                                 }
                             });
                             column.Item().Text("").LineHeight(0.5f).FontSize(14);
@@ -125,7 +125,7 @@ namespace BLL.PDFWriter
             document.GeneratePdf(path);
         }
 
-        public static async Task SetParam(TextDescriptor text, string content, string param)
+        public static void SetParam(TextDescriptor text, string content, string param)
         {
             var f = text.Span(content);
             for (int i = 0; i < param.Length; i++)
