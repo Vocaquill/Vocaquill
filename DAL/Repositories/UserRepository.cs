@@ -2,6 +2,7 @@
 using DAL.Interfaces;
 using DAL.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,7 @@ namespace DAL.Repositories
 
         public async Task AddUserAsync(User user)
         {
+            user.Password = new PasswordHasher<User>().HashPassword(user, user.Password);
             await _context.AddAsync(user);
             await _context.SaveChangesAsync();
         }
@@ -52,7 +54,7 @@ namespace DAL.Repositories
                 existingUser.Name = user.Name;
                 existingUser.Email = user.Email;
                 existingUser.Login = user.Login;
-                existingUser.Password = user.Password;
+                existingUser.Password = new PasswordHasher<User>().HashPassword(user, user.Password);
 
                 await _context.SaveChangesAsync();
             }
