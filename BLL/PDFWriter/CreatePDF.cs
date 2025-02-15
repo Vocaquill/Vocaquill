@@ -35,14 +35,14 @@ namespace BLL.PDFWriter
        H1BIUSP: Text\n
        */
 
-        public static void TextToPDF(string path, string text)
+        public static async Task TextToPDFAsync(string path, string text)
         {
-            List<Paragraph> rows = GetRows(text);
+            List<Paragraph> rows = await GetRows(text);
 
-            CreatePDFFile(path, rows);
+            await CreatePDFFile(path, rows);
         }
 
-        private static List<Paragraph> GetRows(string text)
+        private static async Task<List<Paragraph>> GetRows(string text)
         {
             var testList = text.Split('\n').ToList().Where(x => !String.IsNullOrWhiteSpace(x)).ToList();
 
@@ -81,7 +81,7 @@ namespace BLL.PDFWriter
             return rows;
         }
 
-        private static void CreatePDFFile(string path, List<Paragraph> rows)
+        private static async Task CreatePDFFile(string path, List<Paragraph> rows)
         {
             QuestPDF.Settings.License = LicenseType.Community;
 
@@ -100,11 +100,11 @@ namespace BLL.PDFWriter
 
                         foreach (var r in rows)
                         {
-                            column.Item().Text(t =>
+                            column.Item().Text(async t =>
                             {
                                 foreach (var pair in r.Pairs)
                                 {
-                                    SetParam(t, pair.Text, pair.Param);
+                                    await SetParam(t, pair.Text, pair.Param);
                                 }
                             });
                             column.Item().Text("").LineHeight(0.5f).FontSize(14);
@@ -125,7 +125,7 @@ namespace BLL.PDFWriter
             document.GeneratePdf(path);
         }
 
-        public static void SetParam(TextDescriptor text, string content, string param)
+        public static async Task SetParam(TextDescriptor text, string content, string param)
         {
             var f = text.Span(content);
             for (int i = 0; i < param.Length; i++)

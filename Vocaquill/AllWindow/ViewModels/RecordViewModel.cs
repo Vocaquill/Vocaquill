@@ -67,7 +67,7 @@ namespace Vocaquill.AllWindow.ViewModels
 
                         string aiAnswer = await _geminiATC.CreateSummaryAsync(QuestionSettings);
 
-                        CreatePDF.TextToPDF("Text.pdf", aiAnswer);
+                        await CreatePDF.TextToPDFAsync("Text.pdf", aiAnswer);
 
                         FunctionalityPage.ShowInfo(aiAnswer);
 
