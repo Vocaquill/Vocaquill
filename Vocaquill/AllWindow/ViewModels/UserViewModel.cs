@@ -79,7 +79,7 @@ namespace Vocaquill.AllWindow.ViewModels
                 return _navigateCommand ??= new BaseCommand(async _ =>
                 {
                     var mainWindow = (MainWindow)Application.Current.MainWindow;
-                    mainWindow.modalFrame.Navigate(new RegisterWindowPage(new UserViewModel(_dBSingleton)));
+                    mainWindow.modalFrame.Navigate(new RegisterWindowPage(new UserViewModel()));
                 });
             }
         }
@@ -102,11 +102,11 @@ namespace Vocaquill.AllWindow.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        public UserViewModel(DBSingleton singleton)
+        public UserViewModel()
         {
             User_login = new UserDTO();
             User_register = new UserDTO();
-            _dBSingleton = singleton;
+            _dBSingleton = DBSingleton.Instance;
         }
         #region Validation
 
