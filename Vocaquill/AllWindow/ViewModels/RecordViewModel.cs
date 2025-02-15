@@ -125,7 +125,7 @@ namespace Vocaquill.AllWindow.ViewModels
                         string fileName = $"{SelectedQuery.Name}_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
                         string filePath = Path.Combine(directoryPath, fileName);
 
-                        await CreatePDF.TextToPDFAsync("Text.pdf", _aiAnswer);
+                        await CreatePDF.TextToPDFAsync(filePath, SelectedQuery.Response);
 
                         DynamicDesigner.ShowInfoMessage($"Конспект збережено у файл: {fileName}");
 
