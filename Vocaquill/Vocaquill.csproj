@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <None Remove="Images\settingLogo.png" />
+    <None Remove="Images\VocaquillIcon.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,6 +23,9 @@
 
   <ItemGroup>
     <Resource Include="Images\settingLogo.png" />
+    <Resource Include="Images\VocaquillIcon.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>
