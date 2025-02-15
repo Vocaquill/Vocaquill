@@ -34,13 +34,18 @@ namespace Vocaquill.AllWindow.ViewModels
                     {
                         try
                         {
-                            await _dBSingleton.DBService.UserService.AddUserAsync(new UserDTO()
+                            var newUser = new UserDTO()
                             {
                                 Login = User_register.Login,
                                 Email = User_register.Email,
                                 Password = User_register.Password,
                                 Name = User_register.Login
-                            });
+                            };
+
+                            await _dBSingleton.DBService.UserService.AddUserAsync(newUser);
+
+                            DBSingleton.Instance.CurrentUser = newUser;
+
                             var mainWindow = (MainWindow)Application.Current.MainWindow;
                             mainWindow.modalFrame.Navigate(new MainPage(new RecordViewModel()));
                         }
@@ -61,7 +66,7 @@ namespace Vocaquill.AllWindow.ViewModels
                 {
                     try
                     {
-                        await _dBSingleton.DBService.UserService.GetUserByLoginAndPasswordAsync(User_login.Login, User_login.Password);
+                        DBSingleton.Instance.CurrentUser = await _dBSingleton.DBService.UserService.GetUserByLoginAndPasswordAsync(User_login.Login, User_login.Password);
                         var mainWindow = (MainWindow)Application.Current.MainWindow;
                         mainWindow.modalFrame.Navigate(new MainPage(new RecordViewModel()));
                     }
@@ -79,7 +84,7 @@ namespace Vocaquill.AllWindow.ViewModels
                 return _navigateCommand ??= new BaseCommand(async _ =>
                 {
                     var mainWindow = (MainWindow)Application.Current.MainWindow;
-                    mainWindow.modalFrame.Navigate(new RegisterWindowPage(new UserViewModel(_dBSingleton)));
+                    mainWindow.modalFrame.Navigate(new RegisterWindowPage(new UserViewModel()));
                 });
             }
         }
@@ -102,11 +107,11 @@ namespace Vocaquill.AllWindow.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        public UserViewModel(DBSingleton singleton)
+        public UserViewModel()
         {
             User_login = new UserDTO();
             User_register = new UserDTO();
-            _dBSingleton = singleton;
+            _dBSingleton = DBSingleton.Instance;
         }
         #region Validation
 
