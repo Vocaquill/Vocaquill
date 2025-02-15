@@ -139,57 +139,21 @@ namespace BLL.PDFWriter
                 else
                     p = param[i].ToString();
 
-                if (p == "H1")
+                switch (p)
                 {
-                    f.FontSize(24);
-                }
-                else if (p == "H2")
-                {
-                    f.FontSize(22);
-                }
-                else if (p == "H3")
-                {
-                    f.FontSize(20);
-                }
-                else if (p == "H4")
-                {
-                    f.FontSize(18);
-                }
-                else if (p == "H5")
-                {
-                    f.FontSize(16);
-                }
-                else if (p == "H6")
-                {
-                    f.FontSize(14);
-                }
-                else if (p == "H7")
-                {
-                    f.FontSize(12);
-                }
-                else if (p == "H8")
-                {
-                    f.FontSize(10);
-                }
-                else if (p == "H9")
-                {
-                    f.FontSize(8);
-                }
-                else if (p == "B")
-                {
-                    f.Bold();
-                }
-                else if (p == "I")
-                {
-                    f.Italic();
-                }
-                else if (p == "U")
-                {
-                    f.Underline();
-                }
-                else if (p == "S")
-                {
-                    f.Strikethrough();
+                    case "H1": f.FontSize(24); break;
+                    case "H2": f.FontSize(22); break;
+                    case "H3": f.FontSize(20); break;
+                    case "H4": f.FontSize(18); break;
+                    case "H5": f.FontSize(16); break;
+                    case "H6": f.FontSize(14); break;
+                    case "H7": f.FontSize(12); break;
+                    case "H8": f.FontSize(10); break;
+                    case "H9": f.FontSize(8); break;
+                    case "B": f.Bold(); break;
+                    case "I": f.Italic(); break;
+                    case "U": f.Underline(); break;
+                    case "S": f.Strikethrough(); break;
                 }
             }
         }
